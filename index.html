@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chit Chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; background-color: #eee}
+      form { background: #000; padding: 3px; position: fixed; bottom: 0px; display: flex;  width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding:0px;}
+      #messages span { padding: 5px 10px; border-radius: 4px; font-size: 18px;}
+      #messages span:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+  <body>
+    <div id="messages" style="display: flex; flex-direction: column; margin: 2vw; background-color: #fff; min-height: 85vh; max-height: 85vh; padding: 2vw; overflow: auto; direction: ttb; box-shadow: 0 0px 6px 0  inset">
+    </div>
+    
+    <form action="">
+      <input id="m" autocomplete="off" autofocus="" placeholder="Type here!" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  var socket = io();
+  $('form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<span>').text(msg));
+    scroll();
+  });
+
+  var scroll = function(){
+    $('#messages').scrollTop($('#messages')[0].scrollHeight);
+  }
+  
+</script>
+  </body>
+</html>
